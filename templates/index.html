@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>FA Gallery Viewer</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles.css') }}"
+    />
+    <script
+      src="https://kit.fontawesome.com/a076d05399.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <div class="header">
+      <i class="fas fa-paw"></i> Furaffinity Archive Viewer
+      <i class="fas fa-paw"></i>
+    </div>
+    <div class="pagination">
+      <button id="prevPage">Prev</button>
+      <input type="hidden" id="currentPage" value="1" />
+      <button id="nextPage">Next</button>
+    </div>
+    <div class="search-bar">
+      <div>
+        <label for="gallery">Gallery:</label>
+        <select id="gallery">
+          <option>Main</option>
+          <option>Favorites</option>
+        </select>
+      </div>
+      <div>
+        <label for="user">User:</label>
+        <input type="text" id="user" placeholder="Search for username" />
+      </div>
+
+      <div>
+        <label for="search">Search:</label>
+        <input type="text" id="search" placeholder="Search for entries" />
+      </div>
+    </div>
+    <div class="search-results">
+      <h2>Search Results</h2>
+      <div class="sort">
+        <label for="sort">Sort:</label>
+        <select id="sort">
+          <option value="DESC">Newest to oldest</option>
+          <option value="ASC">Oldest to newest</option>
+        </select>
+      </div>
+      <div class="gallery">
+        <!-- entries will be displayed here -->
+      </div>
+    </div>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+  </body>
+</html>
