@@ -65,7 +65,10 @@ document.addEventListener("DOMContentLoaded", function () {
                     <div class="date" title="${item.date_uploaded}">Uploaded: ${item.date_uploaded}</div>
                 </div>
             `;
-
+            itemDiv.onclick = function() {
+                window.location.href = `/submission/${item.id}`;
+            };            
+            
             gallery.appendChild(itemDiv);
         });
     }

@@ -1,0 +1,47 @@
+<html>
+<head>
+    <title>Art Page</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles.css') }}"
+    />
+</head>
+<body>
+    <div class="header">
+        <div class="left">
+            <button onclick="window.history.back()">Back to search</button>
+        </div>
+    </div>
+    <div class="main-content">
+        <div class="left-panel">
+            <img id="artwork-image" src="" alt="Artwork">
+            <div class="details">
+                <h2 id="submission-title">Title</h2>
+                <p id="user-info">Username, posted X months ago</p>
+                <p id="description">Lorem ipsum...</p>
+            </div>
+            <div class="comments" id="comments-section">
+                <!-- Comments will be injected here -->
+            </div>
+        </div>
+        <div class="right-panel">
+            <div class="details">
+                <div class="tags" id="tags-list">
+                    <!-- Tags will be injected here -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <p>Advertise | Get FA+ | Merch Store | Terms of Service | Privacy | Code of Conduct | Upload Policy</p>
+        <p>70461 users online - 1925 guests, 13721 registered and 54814 other</p>
+        <p>Limit bot activity to periods with less than 10k registered users online.</p>
+        <p>&copy; 2005-2024 Frost Dragon Art LLC</p>
+        <p>Server time: August 15, 2024 09:24 PM</p>
+    </div>
+    <script id="submission-data" type="application/json">{{ item | tojson | safe }}</script>
+<script id="comments-data" type="application/json">{{ comments | tojson | safe }}</script>
+<script src="{{ url_for('static', filename='submission-view.js') }}"></script>
+
+</body>
+</html>

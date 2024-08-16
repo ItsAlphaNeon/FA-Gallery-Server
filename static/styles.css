@@ -267,7 +267,78 @@ body {
   border-radius: 10px;
 }
 
-
+.main-content {
+  display: flex;
+  padding: 20px;
+}
+.main-content .left-panel {
+  flex: 3;
+  margin-right: 20px;
+}
+.main-content .right-panel {
+  flex: 1;
+}
+.main-content img {
+  width: 100%;
+  border: 1px solid #444;
+}
+.main-content .details {
+  background-color: #2a2a2a;
+  padding: 10px;
+  margin-top: 10px;
+}
+.main-content .details h2 {
+  margin: 0;
+  font-size: 18px;
+}
+.main-content .details p {
+  margin: 5px 0;
+}
+.main-content .details .tags {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+}
+.main-content .details .tags span {
+  background-color: #444;
+  padding: 5px;
+  margin: 5px;
+  border-radius: 3px;
+}
+.main-content .comments {
+  margin-top: 20px;
+}
+.main-content .comments .comment {
+  background-color: #2a2a2a;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+.main-content .comments .comment .user {
+  display: flex;
+  align-items: center;
+}
+.main-content .comments .comment .user img {
+  height: 30px;
+  width: 30px;
+  margin-right: 10px;
+}
+.main-content .comments .comment .user span {
+  font-weight: bold;
+}
+.main-content .comments .comment p {
+  margin: 5px 0;
+  margin-left: 40px; /* Indent text to align with username */
+}
+.main-content .comments .comment .replies {
+  margin-left: 20px;
+  margin-top: 10px;
+}
+.footer {
+  background-color: #2a2a2a;
+  padding: 10px;
+  text-align: center;
+  font-size: 12px;
+}
 
 /* Mobile */
 
