@@ -318,6 +318,7 @@ body {
   background-color: #2a2a2a;
   padding: 10px;
   margin-bottom: 10px;
+  border-radius: 10px;
 }
 .main-content .comments .comment .user {
   display: flex;

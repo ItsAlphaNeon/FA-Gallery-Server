@@ -26,6 +26,15 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("comments-data").textContent
     );
 
+    fetch(`/submission/${item.id}/neighbors`)
+        .then(response => response.json())
+        .then(neighborsData => {
+            setupNavigationButtons(neighborsData);
+        })
+        .catch(error => {
+            console.error('Error fetching neighbors data:', error);
+        });
+
     document.getElementById("submission-title").textContent = item.title;
     document.getElementById("user-info").textContent = `${item.username
         }, posted ${new Date(item.date_uploaded).toDateString()}`;
@@ -76,6 +85,27 @@ document.addEventListener("DOMContentLoaded", function () {
         commentsContainer.innerHTML = "<p>No comments yet.</p>";
     }
 });
+
+function setupNavigationButtons(neighborsData) {
+    const prevBtn = document.getElementById("prev-button");
+    const nextBtn = document.getElementById("next-button");
+
+    if (neighborsData.previous) {
+        prevBtn.addEventListener("click", function() {
+            window.location.href = `/submission/${neighborsData.previous.id}`;
+        });
+    } else {
+        prevBtn.disabled = true; 
+    }
+
+    if (neighborsData.next) {
+        nextBtn.addEventListener("click", function() {
+            window.location.href = `/submission/${neighborsData.next.id}`;
+        });
+    } else {
+        nextBtn.disabled = true; 
+    }
+}
 
 function getCleanUserImg(username) {
     const cleanName = username.split(" ")[0].toLowerCase().replace(/[_]/g, "");

@@ -44,6 +44,31 @@ def submission_view(submission_id):
     
     finally:
         db.close()
+        
+@app.route('/submission/<int:submission_id>/neighbors')
+def submission_neighbors(submission_id):
+    db = get_db()
+    try:
+        submission_query = "SELECT username, date_uploaded FROM subdata WHERE id = ?"
+        submission = db.execute(submission_query, (submission_id,)).fetchone()
+        if submission is None:
+            return "Submission not found", 404
+        
+        username, date_uploaded = submission['username'], submission['date_uploaded']
+        
+        previous_query = "SELECT id, title FROM subdata WHERE username = ? AND date_uploaded < ? ORDER BY date_uploaded DESC LIMIT 1"
+        previous = db.execute(previous_query, (username, date_uploaded)).fetchone()
+        
+        next_query = "SELECT id, title FROM subdata WHERE username = ? AND date_uploaded > ? ORDER BY date_uploaded ASC LIMIT 1"
+        next = db.execute(next_query, (username, date_uploaded)).fetchone()
+        
+        return jsonify({
+            'previous': dict(previous) if previous else None,
+            'next': dict(next) if next else None
+        })
+    
+    finally:
+        db.close()
 
 
 @app.route('/proxy-image/')
