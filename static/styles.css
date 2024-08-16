@@ -267,6 +267,8 @@ body {
   border-radius: 10px;
 }
 
+
+
 /* Mobile */
 
 @media (max-width: 767px) {
@@ -344,6 +346,17 @@ body {
     color: #fff;
     cursor: pointer;
     border-radius: 5px;
+  }
+  
+  .footer-pagination .pagination {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .footer-pagination .pagination span,
+  .footer-pagination .pagination button {
+    margin-bottom: 4px;
   }
 }
 
