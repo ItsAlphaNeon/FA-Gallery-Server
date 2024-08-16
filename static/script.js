@@ -3,6 +3,12 @@ document.addEventListener("DOMContentLoaded", function () {
     const userInput = document.getElementById("user");
     const sortInput = document.getElementById("sort");
 
+    function search() {
+        resetPageNumber();
+        fetchGallery();
+        console.log("Searching...)");
+    }
+
     function fetchGallery() {
         const query = encodeURIComponent(searchInput.value);
         const user = encodeURIComponent(userInput.value);
@@ -11,7 +17,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const ratings = Array.from(
             document.querySelectorAll('input[name="rating"]:checked')
         ).map((el) => el.value);
-        const gallery = document.getElementById("gallery"); // Selection between Main and Favorites Gallery
+        const gallery = document.getElementById("gallery");
 
         let url = `/gallery?user=${user}&search=${query}&sort=${sort}&page=${page}&gallery=${gallery.value}`;
         ratings.forEach((rating) => {
@@ -105,12 +111,11 @@ document.addEventListener("DOMContentLoaded", function () {
         currentPage.value = 1;
     }
 
-    document.getElementById("searchButton").addEventListener("click", {});
+    document.getElementById("searchButton").addEventListener("click", search);
 
     document.getElementById("user").addEventListener("keydown", function (event) {
         if (event.key === "Enter") {
-            resetPageNumber();
-            fetchGallery();
+            search();
         }
     });
 
@@ -118,8 +123,7 @@ document.addEventListener("DOMContentLoaded", function () {
         .getElementById("search")
         .addEventListener("keydown", function (event) {
             if (event.key === "Enter") {
-                resetPageNumber();
-                fetchGallery();
+                search();
             }
         });
 

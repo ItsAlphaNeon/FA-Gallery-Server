@@ -34,7 +34,7 @@ def gallery():
     search = request.args.get('search', '')
     gallery_type = request.args.get('gallery', 'main')
     sort = request.args.get('sort', 'DESC').upper()
-    ratings = request.args.getlist('rating')  # Using getlist to handle multiple values
+    ratings = request.args.getlist('rating')  
     page = int(request.args.get('page', 1))
     per_page = 50
     offset = (page - 1) * per_page
