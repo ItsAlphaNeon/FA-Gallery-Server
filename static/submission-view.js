@@ -29,7 +29,8 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("submission-title").textContent = item.title;
     document.getElementById("user-info").textContent = `${item.username
         }, posted ${new Date(item.date_uploaded).toDateString()}`;
-    document.getElementById("description").textContent = item.desc; // TODO: Sanitize this, and allow markdown
+    document.getElementById("description").innerHTML = sanitizeHTML(item.desc) // TODO: Sanitize this, and allow markdown
+    
 
     // Rating header
     const ratingHeader = document.createElement("h3");
@@ -144,4 +145,28 @@ function renderPDFLink(container, item) {
     link.textContent = "Download PDF";
     link.target = "_blank";
     container.appendChild(link);
+}
+
+function sanitizeHTML(html) {
+    // Use DOMPurify to clean the HTML
+    const cleanHTML = DOMPurify.sanitize(html, {
+        ALLOWED_TAGS: ['b', 'i', 'em', 'strong', 'a', 'p', 'br', 'ul', 'ol', 'li', 'blockquote', 'pre', 'code', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'], // Allow only the tags you need
+        ADD_ATTR: ['width', 'height', 'style'], // Add any attributes you need, but be cautious with style to prevent CSS-based attacks
+        FORBID_TAGS: ['img'] // Disallow <img> tags
+    });
+
+    // Optionally, you could manipulate the HTML further, e.g., adjust <img> tags
+    const parser = new DOMParser();
+    const parsedHtml = parser.parseFromString(cleanHTML, 'text/html');
+
+    // Ensure links work
+    const links = parsedHtml.getElementsByTagName('a');
+    for (let i = 0; i < links.length; i++) {
+        links[i].setAttribute('target', '_blank');
+    }
+
+    // Serialize the HTML back to a string
+    const div = document.createElement('div');
+    div.appendChild(parsedHtml.body.firstChild);
+    return div.innerHTML;
 }
