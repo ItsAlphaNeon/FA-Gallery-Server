@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const contentContainer = document.getElementById("content-container");
 
     const fileType = item.content_name.split('.').pop().toLowerCase();
-    switch(fileType) {
+    switch (fileType) {
         case 'jpg':
         case 'jpeg':
         case 'png':
@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("user-info").textContent = `${item.username
         }, posted ${new Date(item.date_uploaded).toDateString()}`;
     document.getElementById("description").innerHTML = sanitizeHTML(item.desc) // TODO: Sanitize this, and allow markdown
-    
+
 
     // Rating header
     const ratingHeader = document.createElement("h3");
@@ -39,10 +39,10 @@ document.addEventListener("DOMContentLoaded", function () {
     document.querySelector(".right-panel .rating").appendChild(ratingHeader);
 
     // Category header
-    const categoryHeader = document.createElement("h3"); 
-    categoryHeader.textContent = item.category; 
+    const categoryHeader = document.createElement("h3");
+    categoryHeader.textContent = item.category;
     categoryHeader.className = "category";
-    document.querySelector(".right-panel .rating").appendChild(categoryHeader); 
+    document.querySelector(".right-panel .rating").appendChild(categoryHeader);
 
     if (item.tags) {
         const tagsContainer = document.getElementById("tags-list");
@@ -113,13 +113,13 @@ function renderImage(container, item) {
     const imageElement = document.createElement("img");
     imageElement.src = imagePath;
     imageElement.alt = item.title;
-    
+
     const link = document.createElement("a");
-    link.href = imagePath; 
+    link.href = imagePath;
     link.target = "_blank";
     link.title = item.title;
     link.appendChild(imageElement);
-    
+
     container.appendChild(link);
 }
 
@@ -148,25 +148,37 @@ function renderPDFLink(container, item) {
 }
 
 function sanitizeHTML(html) {
-    // Use DOMPurify to clean the HTML
-    const cleanHTML = DOMPurify.sanitize(html, {
-        ALLOWED_TAGS: ['b', 'i', 'em', 'strong', 'a', 'p', 'br', 'ul', 'ol', 'li', 'blockquote', 'pre', 'code', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'], // Allow only the tags you need
-        ADD_ATTR: ['width', 'height', 'style'], // Add any attributes you need, but be cautious with style to prevent CSS-based attacks
-        FORBID_TAGS: ['img'] // Disallow <img> tags
+    const allowedTags = [
+        'a', 'b', 'blockquote', 'br', 'code', 'del', 'em', 'h1', 'h2', 'h3', 'hr', 'i', 'img', 'li', 'ol', 'p', 'pre', 's', 'strike', 'strong', 'sub', 'sup', 'u', 'ul'
+    ];
+    const allowedAttributes = {
+        'a': ['href', 'title', 'target'],
+        'img': ['alt']
+    };
+    
+    const placeholderImageSrc = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgAQAAAAAm/md7AAAAEklEQVR42mP8z8Dwn4EIwDiqkL4KAJZ0GDSp+zuwAAAAAElFTkSuQmCC";
+
+    let cleanHTML = DOMPurify.sanitize(html, {
+        ALLOWED_TAGS: allowedTags,
+        ALLOWED_ATTR: allowedAttributes,
     });
 
-    // Optionally, you could manipulate the HTML further, e.g., adjust <img> tags
-    const parser = new DOMParser();
-    const parsedHtml = parser.parseFromString(cleanHTML, 'text/html');
+    const div = document.createElement('div');
+    div.innerHTML = cleanHTML;
 
-    // Ensure links work
-    const links = parsedHtml.getElementsByTagName('a');
-    for (let i = 0; i < links.length; i++) {
-        links[i].setAttribute('target', '_blank');
+    const userLinks = div.getElementsByTagName('a');
+    for (let i = 0; i < userLinks.length; i++) {
+        const link = userLinks[i];
+        const username = link.textContent.trim();
+        link.href = `https://www.furaffinity.net/user/${username}`;
     }
 
-    // Serialize the HTML back to a string
-    const div = document.createElement('div');
-    div.appendChild(parsedHtml.body.firstChild);
+    const images = div.getElementsByTagName('img');
+    for (let img of images) {
+        img.src = placeholderImageSrc;
+        img.style.width = "32px";
+        img.style.height = "32px";
+    }
+
     return div.innerHTML;
 }

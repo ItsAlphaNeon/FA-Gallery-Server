@@ -63,6 +63,7 @@
         <div>
           <button id="prevPageDesktop" class="navigation-button">Prev</button>
             <span id="currentPageText">Current Page: </span>
+            <input type="hidden" id="currentPage" value="1" />
           <button id="nextPageDesktop" class="navigation-button">Next</button>
         </div>
       </div>
@@ -70,15 +71,24 @@
       <div class="gallery">
         <!-- entries will be displayed here -->
       </div>
+      <div class="pagination-desktop">
+        <div>
+          <button id="prevPageDesktopBottom" class="navigation-button">Prev</button>
+            <span id="currentPageTextBottom">Current Page: </span>
+          <button id="nextPageDesktopBottom" class="navigation-button">Next</button>
+        </div>
+      </div>
     </div>
     <footer class="footer-pagination">
       <div class="pagination">
-        <span id="currentPageText">Current Page: </span>
+        <div>
+          <span class="currentPageTextMobile" id="currentPageTextMobile">Current Page: </span>
+        </div>
         <div>
           <button id="prevPageMobile" class="navigation-button">Prev</button>
-          <input type="hidden" id="currentPage" value="1" />
           <button id="nextPageMobile" class="navigation-button">Next</button>
         </div>
+      </div>
       </div>
     </footer>
     <script src="{{ url_for('static', filename='gallery-browser.js') }}"></script>

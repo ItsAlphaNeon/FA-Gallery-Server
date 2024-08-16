@@ -65,7 +65,6 @@ document.addEventListener("DOMContentLoaded", function () {
     
             itemDiv.innerHTML = ratingPanel + infoPanel;
     
-            // Create an invisible button element
             const itemButton = document.createElement("button");
             itemButton.style.background = 'none';
             itemButton.style.border = 'none';
@@ -123,7 +122,11 @@ document.addEventListener("DOMContentLoaded", function () {
         // <span id="currentPageText">Current Page: </span>
         const currentPage = document.getElementById("currentPage");
         const currentPageText = document.getElementById("currentPageText");
+        const currentPageTextBottom = document.getElementById("currentPageTextBottom");
+        const CurrentPageTextMobile = document.getElementById("currentPageTextMobile");
         currentPageText.innerText = `Current Page: ${currentPage.value}`;
+        currentPageTextBottom.innerText = `Current Page: ${currentPage.value}`;
+        CurrentPageTextMobile.innerText = `Current Page: ${currentPage.value}`;
     }
 
     function resetPageNumber() {
@@ -156,6 +159,13 @@ document.addEventListener("DOMContentLoaded", function () {
         .addEventListener("click", () => navigatePages(-1));
     document
         .getElementById("nextPageDesktop")
+        .addEventListener("click", () => navigatePages(1));
+
+    document
+        .getElementById("prevPageDesktopBottom")
+        .addEventListener("click", () => navigatePages(-1));
+    document
+        .getElementById("nextPageDesktopBottom")
         .addEventListener("click", () => navigatePages(1));
     document
         .getElementById("prevPageMobile")
