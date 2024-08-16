@@ -1,4 +1,5 @@
 # Furaffinity Gallery Viewer
+## Please note: This is an experimental project, and is pretty scuffed.
 
 The Furaffinity Gallery Viewer is a web server application designed to let you host and view a gallery of content downloaded from Furaffinity using the [FA-Gallery-Downloader](https://github.com/SpottedSqueak/FA-Gallery-Downloader). This application provides an easy-to-use, web-based interface for browsing your Furaffinity gallery offline, without the need to directly interact with Furaffinity's website or API.
 
