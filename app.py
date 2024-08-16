@@ -40,16 +40,17 @@ def gallery():
     offset = (page - 1) * per_page
 
     search_conditions = f"WHERE id IS NOT NULL "
-    if user:
-        search_conditions += f"AND (username LIKE '%{user}%' OR account_name LIKE '%{user}%') "
+    if gallery_type.lower() == "favorites":
+        search_conditions += f"AND url IN (SELECT url FROM favorites WHERE username LIKE '{user}') "
+    elif gallery_type.lower() == "main":
+        search_conditions += f"AND (username LIKE '%{user}%' OR account_name LIKE '{user}') "
     if search:
         search = f"%{search.replace(' ', '%')}%"
         search_conditions += f"AND (title LIKE '{search}' OR tags LIKE '{search}' OR desc LIKE '{search}' OR content_name LIKE '{search}') "
     if ratings:
         ratings_conditions = ", ".join(f"'{rating.title()}'" for rating in ratings)
         search_conditions += f"AND rating IN ({ratings_conditions}) "
-    if gallery_type.lower() == "favorites":
-        search_conditions += f"AND url IN (SELECT url FROM favorites WHERE username LIKE '%{user}') "
+    
 
     query = f"""
         SELECT id, title, username, account_name, content_url, thumbnail_url, date_uploaded, is_content_saved, content_name, is_thumbnail_saved, thumbnail_name, rating 
@@ -61,6 +62,7 @@ def gallery():
 
     db = get_db()
     items = db.execute(query, (per_page, offset)).fetchall()
+    logging.debug(f"Query: {query}")
     db.close()
     return jsonify([dict(item) for item in items])
 

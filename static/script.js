@@ -11,8 +11,9 @@ document.addEventListener("DOMContentLoaded", function () {
         const ratings = Array.from(
             document.querySelectorAll('input[name="rating"]:checked')
         ).map((el) => el.value);
+        const gallery = document.getElementById("gallery"); // Selection between Main and Favorites Gallery
 
-        let url = `/gallery?user=${user}&search=${query}&sort=${sort}&page=${page}`;
+        let url = `/gallery?user=${user}&search=${query}&sort=${sort}&page=${page}&gallery=${gallery.value}`;
         ratings.forEach((rating) => {
             url += `&rating=${encodeURIComponent(rating)}`;
         });
@@ -142,6 +143,8 @@ document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll('input[name="rating"]').forEach((checkbox) => {
         checkbox.addEventListener("change", fetchGallery);
     });
+
+    document.getElementById("gallery").addEventListener("change", fetchGallery);
 
     function navigatePages(change) {
         const currentPageInput = document.getElementById("currentPage");
