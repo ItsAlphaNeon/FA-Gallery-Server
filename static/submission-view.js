@@ -38,7 +38,7 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("submission-title").textContent = item.title;
     document.getElementById("user-info").textContent = `${item.username
         }, posted ${new Date(item.date_uploaded).toDateString()}`;
-    document.getElementById("description").innerHTML = sanitizeHTML(item.desc) // TODO: Sanitize this, and allow markdown
+    document.getElementById("description").innerHTML = sanitizeHTML(item.desc)
 
 
     // Rating header

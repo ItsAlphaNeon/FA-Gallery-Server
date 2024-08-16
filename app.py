@@ -7,7 +7,8 @@ import io
 
 app = Flask(__name__, static_folder="static")
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
-DATABASE = "fa-gallery-downloader.db" # TODO: make this a dynamic search for the database
+DATABASE = [file for file in os.listdir() if file.endswith('.db')][0]
+
 DOWNLOAD_DIR = os.path.join(os.getcwd(), "downloaded_content")
 
 def get_db():
