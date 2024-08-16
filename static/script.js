@@ -124,10 +124,16 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
     document
-        .getElementById("prevPage")
+        .getElementById("prevPageDesktop")
         .addEventListener("click", () => navigatePages(-1));
     document
-        .getElementById("nextPage")
+        .getElementById("nextPageDesktop")
+        .addEventListener("click", () => navigatePages(1));
+    document
+        .getElementById("prevPageMobile")
+        .addEventListener("click", () => navigatePages(-1));
+    document
+        .getElementById("nextPageMobile")
         .addEventListener("click", () => navigatePages(1));
 
     function navigatePages(change) {

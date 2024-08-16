@@ -45,7 +45,7 @@ body {
 
 .sort {
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   align-items: center;
   padding: 10px;
   background-color: #3a3a3a;
@@ -280,7 +280,9 @@ body {
   body {
       font-size: 1.2em; 
   }
-
+  .search-bar div {
+      margin: 6px 0;
+  }
   .search-bar input[type="text"],
   .search-bar select,
   .search-bar button,
@@ -332,6 +334,15 @@ body {
 
   .pagination-desktop {
     display: none;
+  }
+
+  .pagination button {
+    padding: 5px 10px;
+    border: none;
+    background-color: #4a90e2;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 5px;
   }
 }
 
