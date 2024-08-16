@@ -340,7 +340,111 @@ body {
   font-size: 12px;
 }
 
-/* Mobile */
+.rating-general-submission,
+.rating-mature-submission,
+.rating-adult-submission {
+    border-radius: 10px; 
+    padding: 10px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.rating-general-submission {
+  background-color: #474747; 
+
+}
+
+.rating-mature-submission {
+  background-color: #0099ff; 
+}
+
+.rating-adult-submission {
+  background-color: #c2352b; 
+}
+
+.details {
+  border-radius: 10px; 
+    padding: 10px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.tags-header {
+  font-size: 1.2em;
+  margin-bottom: 10px;
+}
+
+.gallery-item-thumbnail-button {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  width: auto;
+  height: auto;
+  cursor: pointer;
+}
+
+.category {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  background-color: #2a2a2a;
+  border-radius: 10px;
+}
+
+.left {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.left button {
+  padding: 5px 10px;
+  border: none;
+  background-color: #4a90e2;
+  color: #fff;
+  cursor: pointer;
+  border-radius: 5px;
+}
+/* TODO: Make these shitfuck styles work. */
+/* General styling for content containers */
+.content-container {
+  text-align: center; 
+  padding: 20px;
+  margin: 20px auto; 
+  max-width: 90%;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1); 
+  border-radius: 8px; 
+  background-color: #fff;
+  border: 1px solid #ddd; 
+}
+
+/* Specific styling for audio elements */
+.content-container audio {
+  width: 100%; 
+  max-width: 640px;
+  margin: 10px aut
+}
+
+/* Styling for PDF links */
+.content-container a.pdf-link {
+  display: block; 
+  margin: 10px auto; 
+  padding: 10px 15px; 
+  background-color: #007bff; 
+  color: #ffffff; 
+  text-decoration: none; 
+  border-radius: 5px; 
+}
+
+.content-container a.pdf-link:hover {
+  background-color: #0056b3; 
+}
+
+
+
+
+/* Mobile Gallery-browser*/
 
 @media (max-width: 767px) {
   .gallery-item {
@@ -432,3 +536,33 @@ body {
 }
 
 
+
+/* Mobile Submission-view */
+
+@media (max-width: 767px) {
+  .main-content {
+      display: block; 
+  }
+
+  .left-panel, .right-panel {
+      margin-right: 0; 
+      width: 100%;
+  }
+  .comments, .rating, .details, .tags-list {
+    margin: 10px; 
+  }
+
+  .left {
+    display: flex;
+    justify-content: center; 
+  }
+  
+  .left button {
+    padding: 5px 10px;
+    border: none;
+    background-color: #4a90e2;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+}

@@ -84,7 +84,7 @@ def gallery():
     
 
     query = f"""
-        SELECT id, title, username, account_name, content_url, thumbnail_url, date_uploaded, is_content_saved, content_name, is_thumbnail_saved, thumbnail_name, rating 
+        SELECT id, title, username, account_name, content_url, thumbnail_url, date_uploaded, is_content_saved, content_name, is_thumbnail_saved, thumbnail_name, rating , category, tags, desc
         FROM subdata
         {search_conditions}
         ORDER BY content_name {sort}

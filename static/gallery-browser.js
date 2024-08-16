@@ -41,37 +41,54 @@ document.addEventListener("DOMContentLoaded", function () {
                     : getFullImagePath(item);
             const itemDiv = document.createElement("div");
             itemDiv.className = "gallery-item";
-
+    
             const ratingClass = getRatingClass(item.rating);
+            itemDiv.className += ` ${ratingClass}`;
+    
             const ratingPanel = `
                 <div class="gallery-item-rating ${ratingClass}" title="Rating: ${item.rating}">
                     ${item.rating}
                 </div>
             `;
-            itemDiv.classList.add(ratingClass);
-
-            itemDiv.innerHTML = `
-                ${ratingPanel}
-                <div class="gallery-item-thumbnail" title="View submission">
-                    <img src="/content${thumbUrl}" alt="${item.title}" class="gallery-thumbnail">
-                </div>
+    
+            const infoPanel = `
                 <div class="gallery-item-info">
                     <div class="title" title="${item.title}">${item.title}</div>
                     <div class="author" title="Search for this user">
-                    <span class="author-label">by</span>
+                        <span class="author-label">by</span>
                         <span class="author-name">${item.username}</span>
                         <a href="/?user=${item.account_name}" class="search-link">🔍</a>
                     </div>
                     <div class="date" title="${item.date_uploaded}">Uploaded: ${item.date_uploaded}</div>
                 </div>
             `;
-            itemDiv.onclick = function() {
+    
+            itemDiv.innerHTML = ratingPanel + infoPanel;
+    
+            // Create an invisible button element
+            const itemButton = document.createElement("button");
+            itemButton.style.background = 'none';
+            itemButton.style.border = 'none';
+            itemButton.style.padding = '0';
+            itemButton.style.margin = '0';
+            itemButton.style.width = 'auto';
+            itemButton.style.height = 'auto';
+            itemButton.style.cursor = 'pointer';
+            itemButton.innerHTML = `
+                <img src="/content${thumbUrl}" alt="${item.title}" class="gallery-thumbnail">
+            `;
+    
+            itemButton.onclick = function() {
                 window.location.href = `/submission/${item.id}`;
-            };            
-            
+            };
+    
+            itemDiv.appendChild(itemButton);
             gallery.appendChild(itemDiv);
         });
     }
+    
+    
+    
 
     function getRatingClass(rating) {
         switch (rating) {
