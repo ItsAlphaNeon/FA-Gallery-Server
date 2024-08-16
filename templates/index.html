@@ -2,25 +2,20 @@
 <html>
   <head>
     <title>FA Gallery Viewer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
     <link
       rel="stylesheet"
       href="{{ url_for('static', filename='styles.css') }}"
     />
-    <script
-      src="https://kit.fontawesome.com/a076d05399.js"
-      crossorigin="anonymous"
-    ></script>
   </head>
+
   <body>
     <div class="header">
       <i class="fas fa-paw"></i> Furaffinity Archive Viewer
       <i class="fas fa-paw"></i>
     </div>
-    <div class="pagination">
-      <button id="prevPage">Prev</button>
-      <input type="hidden" id="currentPage" value="1" />
-      <button id="nextPage">Next</button>
-    </div>
+
     <div class="search-bar">
       <div>
         <label for="gallery">Gallery:</label>
@@ -29,6 +24,7 @@
           <option>Favorites</option>
         </select>
       </div>
+
       <div>
         <label for="user">User:</label>
         <input type="text" id="user" placeholder="Search for username" />
@@ -37,6 +33,10 @@
       <div>
         <label for="search">Search:</label>
         <input type="text" id="search" placeholder="Search for entries" />
+      </div>
+
+      <div>
+        <button id="searchButton">Search</button>
       </div>
     </div>
     <div class="search-results">
@@ -48,10 +48,28 @@
           <option value="ASC">Oldest to newest</option>
         </select>
       </div>
+      <div class="pagination-desktop">
+        <div>
+          <button id="prevPage" class="navigation-button">Prev</button>
+            <span id="currentPageText">Current Page: </span>
+          <button id="nextPage" class="navigation-button">Next</button>
+        </div>
+      </div>
+      </div>
       <div class="gallery">
         <!-- entries will be displayed here -->
       </div>
     </div>
+    <footer class="footer-pagination">
+      <div class="pagination">
+        <div>
+          <button id="prevPage" class="navigation-button">Prev</button>
+          <input type="hidden" id="currentPage" value="1" />
+          <button id="nextPage" class="navigation-button">Next</button>
+        </div>
+      </div>
+      </div>
+    </footer>
     <script src="{{ url_for('static', filename='script.js') }}"></script>
   </body>
 </html>

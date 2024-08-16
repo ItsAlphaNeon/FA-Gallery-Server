@@ -6,7 +6,7 @@ import logging
 
 app = Flask(__name__, static_folder="static")
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
-DATABASE = "gallery.db"
+DATABASE = "fa-gallery-downloader.db" # TODO: make this a dynamic search for the database
 DOWNLOAD_DIR = os.path.join(os.getcwd(), "downloaded_content")
 
 def get_db():
@@ -20,9 +20,13 @@ def download_content(filename):
     return send_from_directory(DOWNLOAD_DIR, filename)
 
 
-@app.route("/")
-def index():
-    return render_template("index.html")
+@app.route('/', methods=['GET'])
+def search_user():
+    return render_template('index.html')
+
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory(os.path.join('static'),'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
 @app.route('/gallery', methods=['GET'])
 def gallery():
@@ -45,7 +49,7 @@ def gallery():
         search_conditions += f"AND url IN (SELECT url FROM favorites WHERE username LIKE '%{user}') "
 
     query = f"""
-        SELECT id, title, username, account_name, content_url, thumbnail_url, date_uploaded, is_content_saved, content_name, is_thumbnail_saved, thumbnail_name 
+        SELECT id, title, username, account_name, content_url, thumbnail_url, date_uploaded, is_content_saved, content_name, is_thumbnail_saved, thumbnail_name, rating 
         FROM subdata
         {search_conditions}
         ORDER BY content_name {sort}
@@ -55,9 +59,7 @@ def gallery():
     db = get_db()
     items = db.execute(query, (per_page, offset)).fetchall()
     db.close()
-    logging.debug(f"Query: {query}")
-    logging.debug(f"Items: {jsonify([dict(item) for item in items])}")
     return jsonify([dict(item) for item in items])
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0', port=5000)

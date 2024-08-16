@@ -16,6 +16,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function updateGallery(items) {
+        updatePageNumber();
         const gallery = document.querySelector(".gallery");
         gallery.innerHTML = "";
         items.forEach((item) => {
@@ -25,31 +26,102 @@ document.addEventListener("DOMContentLoaded", function () {
                     : getFullImagePath(item);
             const itemDiv = document.createElement("div");
             itemDiv.className = "gallery-item";
+
+            const ratingClass = getRatingClass(item.rating);
+            const ratingPanel = `
+                <div class="gallery-item-rating ${ratingClass}" title="Rating: ${item.rating}">
+                    ${item.rating}
+                </div>
+            `;
+            itemDiv.classList.add(ratingClass);
+
             itemDiv.innerHTML = `
+                ${ratingPanel}
                 <div class="gallery-item-thumbnail" title="View submission">
                     <img src="/content${thumbUrl}" alt="${item.title}" class="gallery-thumbnail">
                 </div>
                 <div class="gallery-item-info">
                     <div class="title" title="${item.title}">${item.title}</div>
-                    <div class="author" title="Search for this user!">by ${item.username}</div>
-                    <div class="date" title="Uploaded: ${item.date_uploaded}">Uploaded: ${item.date_uploaded}</div>
+                    <div class="author" title="Search for this user">
+                    <span class="author-label">by</span>
+                        <span class="author-name">${item.username}</span>
+                        <a href="/?user=${item.account_name}" class="search-link">🔍</a>
+                    </div>
+                    <div class="date" title="${item.date_uploaded}">Uploaded: ${item.date_uploaded}</div>
                 </div>
             `;
+
             gallery.appendChild(itemDiv);
         });
     }
 
+    function getRatingClass(rating) {
+        switch (rating) {
+            case "General":
+                return "rating-general";
+            case "Mature":
+                return "rating-mature";
+            case "Adult":
+                return "rating-adult";
+            default:
+                return "";
+        }
+    }
+
     function getFullImagePath(item) {
-        const user = item.username;
+        const user = cleanAccountName(item.account_name);
         const content = item.content_name;
         return `/${user}/${content}`;
     }
 
     function getThumbnailPath(item) {
-        const user = item.username;
+        const user = cleanAccountName(item.account_name);
         const thumbnail_name = item.thumbnail_name;
         return `/${user}/thumbnail/${thumbnail_name}`;
     }
+
+    function cleanAccountName(account_name) {
+        return account_name.replace(/\.$/, "._");
+    }
+
+    function updatePageNumber() {
+        // <span id="currentPageText">Current Page: </span>
+        const currentPage = document.getElementById("currentPage");
+        const currentPageText = document.getElementById("currentPageText");
+        currentPageText.innerText = `Current Page: ${currentPage.value}`;
+    }
+
+    function resetPageNumber() {
+        const currentPage = document.getElementById("currentPage");
+        currentPage.value = 1;
+    }
+        
+    document
+        .getElementById("searchButton")
+        .addEventListener("click", {
+        });
+
+    document.getElementById("user").addEventListener("keydown", function (event) {
+        if (event.key === "Enter") {
+            resetPageNumber();
+            fetchGallery();
+        }
+    });
+
+    document
+        .getElementById("search")
+        .addEventListener("keydown", function (event) {
+            if (event.key === "Enter") {
+                resetPageNumber();
+                fetchGallery();
+            }
+        });
+
+    document
+        .getElementById("sort")
+        .addEventListener("change", function (event) {
+            fetchGallery();
+        });
 
     document
         .getElementById("prevPage")
@@ -57,17 +129,27 @@ document.addEventListener("DOMContentLoaded", function () {
     document
         .getElementById("nextPage")
         .addEventListener("click", () => navigatePages(1));
-    searchInput.addEventListener("input", fetchGallery);
-    userInput.addEventListener("input", fetchGallery);
-    sortInput.addEventListener("change", fetchGallery);
 
     function navigatePages(change) {
         const currentPageInput = document.getElementById("currentPage");
         let currentPage = parseInt(currentPageInput.value, 10);
         currentPage += change;
+        if (currentPage < 1) {
+            currentPage = 1;
+        }
         currentPageInput.value = currentPage;
         fetchGallery();
     }
+
+    document.addEventListener("click", function (event) {
+        if (event.target.classList.contains("search-link")) {
+            event.preventDefault();
+            const urlParams = new URLSearchParams(event.target.href.split("?")[1]);
+            const user = urlParams.get("user");
+            userInput.value = user;
+            fetchGallery();
+        }
+    });
 
     fetchGallery();
 });

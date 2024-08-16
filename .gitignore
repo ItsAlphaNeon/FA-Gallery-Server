@@ -264,3 +264,4 @@ pyrightconfig.json
 /downloaded_content
 gallery.db
 /__pycache__
+fa-gallery-downloader.db
