@@ -1,8 +1,9 @@
-from flask import Flask, render_template, request, jsonify, send_from_directory
+from flask import Flask, render_template, request, jsonify, send_from_directory, send_file, Response
 import sqlite3
 import os
 import logging
-
+import requests
+import io
 
 app = Flask(__name__, static_folder="static")
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -22,7 +23,37 @@ def download_content(filename):
 
 @app.route('/', methods=['GET'])
 def search_user():
-    return render_template('index.html')
+    return render_template('gallery-browser.html')
+
+@app.route('/submission/<int:submission_id>')
+def submission_view(submission_id):
+    db = get_db()
+    try:
+        submission_query = "SELECT * FROM subdata WHERE id = ?"
+        submission = db.execute(submission_query, (submission_id,)).fetchone()
+        if submission is None:
+            return "Submission not found", 404
+        
+        submission_dict = dict(submission) if submission else None
+
+        comments_query = "SELECT * FROM commentdata WHERE submission_id = ? ORDER BY date DESC"
+        comments = db.execute(comments_query, (submission_id,)).fetchall()
+        comments_list = [dict(comment) for comment in comments]
+        
+        return render_template('submission-view.html', item=submission_dict, comments=comments_list)
+    
+    finally:
+        db.close()
+
+
+@app.route('/proxy-image/')
+def proxy_image():
+    image_url = request.args.get('url')
+    if image_url:
+        response = requests.get(image_url)
+        return Response(response.content, mimetype=response.headers['Content-Type'])
+    return "No image URL provided", 400
+
 
 @app.route('/favicon.ico')
 def favicon():
