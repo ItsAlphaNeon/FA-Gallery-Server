@@ -415,6 +415,19 @@ body {
   cursor: pointer;
   border-radius: 5px;
 }
+
+.navigation-buttons button {
+  padding: 5px 10px;
+  border: none;
+  background-color: #4a90e2;
+  color: #fff;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  width: 150px;
+}
+
 /* TODO: Make these shitfuck styles work. */
 /* General styling for content containers */
 .content-container {
