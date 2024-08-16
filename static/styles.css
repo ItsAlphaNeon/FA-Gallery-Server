@@ -51,6 +51,7 @@ body {
   background-color: #3a3a3a;
   border-radius: 10px;
   margin-bottom: 20px;
+  gap: 10px;
 }
 
 .sort select {

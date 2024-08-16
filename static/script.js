@@ -8,8 +8,16 @@ document.addEventListener("DOMContentLoaded", function () {
         const user = encodeURIComponent(userInput.value);
         const sort = sortInput.value;
         const page = parseInt(document.getElementById("currentPage").value, 10);
+        const ratings = Array.from(
+            document.querySelectorAll('input[name="rating"]:checked')
+        ).map((el) => el.value);
 
-        fetch(`/gallery?user=${user}&search=${query}&sort=${sort}&page=${page}`)
+        let url = `/gallery?user=${user}&search=${query}&sort=${sort}&page=${page}`;
+        ratings.forEach((rating) => {
+            url += `&rating=${encodeURIComponent(rating)}`;
+        });
+
+        fetch(url)
             .then((response) => response.json())
             .then((data) => updateGallery(data))
             .catch((error) => console.error("Error:", error));
@@ -95,11 +103,8 @@ document.addEventListener("DOMContentLoaded", function () {
         const currentPage = document.getElementById("currentPage");
         currentPage.value = 1;
     }
-        
-    document
-        .getElementById("searchButton")
-        .addEventListener("click", {
-        });
+
+    document.getElementById("searchButton").addEventListener("click", {});
 
     document.getElementById("user").addEventListener("keydown", function (event) {
         if (event.key === "Enter") {
@@ -117,11 +122,9 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
 
-    document
-        .getElementById("sort")
-        .addEventListener("change", function (event) {
-            fetchGallery();
-        });
+    document.getElementById("sort").addEventListener("change", function (event) {
+        fetchGallery();
+    });
 
     document
         .getElementById("prevPageDesktop")
@@ -135,6 +138,10 @@ document.addEventListener("DOMContentLoaded", function () {
     document
         .getElementById("nextPageMobile")
         .addEventListener("click", () => navigatePages(1));
+
+    document.querySelectorAll('input[name="rating"]').forEach((checkbox) => {
+        checkbox.addEventListener("change", fetchGallery);
+    });
 
     function navigatePages(change) {
         const currentPageInput = document.getElementById("currentPage");

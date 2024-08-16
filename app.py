@@ -34,6 +34,7 @@ def gallery():
     search = request.args.get('search', '')
     gallery_type = request.args.get('gallery', 'main')
     sort = request.args.get('sort', 'DESC').upper()
+    ratings = request.args.getlist('rating')  # Using getlist to handle multiple values
     page = int(request.args.get('page', 1))
     per_page = 50
     offset = (page - 1) * per_page
@@ -44,7 +45,9 @@ def gallery():
     if search:
         search = f"%{search.replace(' ', '%')}%"
         search_conditions += f"AND (title LIKE '{search}' OR tags LIKE '{search}' OR desc LIKE '{search}' OR content_name LIKE '{search}') "
-
+    if ratings:
+        ratings_conditions = ", ".join(f"'{rating.title()}'" for rating in ratings)
+        search_conditions += f"AND rating IN ({ratings_conditions}) "
     if gallery_type.lower() == "favorites":
         search_conditions += f"AND url IN (SELECT url FROM favorites WHERE username LIKE '%{user}') "
 
@@ -54,12 +57,13 @@ def gallery():
         {search_conditions}
         ORDER BY content_name {sort}
         LIMIT ? OFFSET ?
-    """
+        """
 
     db = get_db()
     items = db.execute(query, (per_page, offset)).fetchall()
     db.close()
     return jsonify([dict(item) for item in items])
+
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=5000)

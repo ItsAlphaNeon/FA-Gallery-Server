@@ -42,11 +42,22 @@
     <div class="search-results">
       <h2>Search Results</h2>
       <div class="sort">
+        <div>
         <label for="sort">Sort:</label>
         <select id="sort">
           <option value="DESC">Newest to oldest</option>
           <option value="ASC">Oldest to newest</option>
         </select>
+        </div>
+        <div class="rating-tickbox">
+          <input type="checkbox" id="general" name="rating" value="general">
+          <label for="general">General</label>
+          <input type="checkbox" id="mature" name="rating" value="mature">
+          <label for="mature">Mature</label>
+          <input type="checkbox" id="adult" name="rating" value="adult">
+          <label for="adult">Adult</label>
+      </div>
+      
       </div>
       <div class="pagination-desktop">
         <div>
