@@ -42,16 +42,19 @@ def get_db():
     return db
 
 
-@app.route("/content/<username>/<path:filename>") # NOTE: This is using usernames, it wasn't before. this will break
+@app.route("/content/<username>/<path:filename>") 
 def download_content(username, filename):
     base_dir = os.path.join(DOWNLOAD_DIR, username)
     image_path = os.path.join(base_dir, filename)
     thumbnail_requested = request.args.get('thumbnail', False)
 
+
     if thumbnail_requested:
         thumbnail_path = ensure_thumbnail(image_path)
+        print(f"\033[92mSending thumbnail: {thumbnail_path}\033[0m")
         return send_from_directory(base_dir, os.path.basename(thumbnail_path))
     else:
+        print(f"Sending image: {image_path}\033[0m")
         return send_from_directory(base_dir, filename)
 
 
@@ -157,27 +160,26 @@ def gallery():
     db.close()
     return jsonify([dict(item) for item in items])
 
-def create_thumbnail(image_path, thumbnail_path, size=(128, 128)):
-    with Image.open(image_path) as img:
-        img.thumbnail(size)
-        img.save(thumbnail_path)
-
 
 def ensure_thumbnail(image_path):
     directory, filename = os.path.split(image_path)
     thumbnail_path = os.path.join(directory, f"{filename.split('.')[0]}_thumbnail.webp")
 
     if not os.path.exists(thumbnail_path):
-        with Image.open(image_path) as img:
-            width, height = img.size
-            if width < 300 or height < 300:
-                return image_path # Don't create thumbnail if image is too small
-            new_width = int(width * 0.3)  
-            new_height = int(height * 0.3) 
-            img.thumbnail((new_width, new_height))
-            img.save(thumbnail_path, "WEBP")
-
+        create_thumbnail(image_path, thumbnail_path)
+    
     return thumbnail_path
+
+
+def create_thumbnail(image_path, thumbnail_path):
+    with Image.open(image_path) as img:
+        width, height = img.size
+        if width < 300 or height < 300:
+            return image_path  # Don't create thumbnail if image is too small
+        new_width = int(width * 0.3)
+        new_height = int(height * 0.3)
+        img.thumbnail((new_width, new_height))
+        img.save(thumbnail_path, "WEBP")
 
 
 
