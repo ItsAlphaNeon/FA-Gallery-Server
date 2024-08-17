@@ -4,12 +4,37 @@ import os
 import logging
 import requests
 import io
+from PIL import Image
+import sys
+import argparse
+
+DATABASE = [file for file in os.listdir() if file.endswith('.db')][0]
+if not DATABASE:
+    sys.exit("Database not found. Please import your database file to {os.getcwd()}")
+DOWNLOAD_DIR = os.path.join(os.getcwd(), "downloaded_content")
+if not os.path.exists(DOWNLOAD_DIR):
+    sys.exit(f"Download directory not found. Please import your downloaded_content folder to {os.getcwd()}")
+
+parser = argparse.ArgumentParser(description='Run the Flask app with options to manage thumbnails.')
+parser.add_argument('--clear-thumbnails', action='store_true', help='Clear all thumbnail caches')
+args = parser.parse_args()
+
+def clear_thumbnails(directory):
+    for root, dirs, files in os.walk(directory):
+        for file in files:
+            if file.endswith("_thumbnail.webp"):
+                thumbnail_path = os.path.join(root, file)
+                os.remove(thumbnail_path)
+                print(f"Removed {thumbnail_path}")
+                
+if args.clear_thumbnails:
+    clear_thumbnails(DOWNLOAD_DIR)
+    print("All thumbnails cleared.")
+    sys.exit()
+
 
 app = Flask(__name__, static_folder="static")
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
-DATABASE = [file for file in os.listdir() if file.endswith('.db')][0]
-
-DOWNLOAD_DIR = os.path.join(os.getcwd(), "downloaded_content")
 
 def get_db():
     db = sqlite3.connect(DATABASE)
@@ -17,9 +42,18 @@ def get_db():
     return db
 
 
-@app.route("/content/<path:filename>")
-def download_content(filename):
-    return send_from_directory(DOWNLOAD_DIR, filename)
+@app.route("/content/<username>/<path:filename>") # NOTE: This is using usernames, it wasn't before. this will break
+def download_content(username, filename):
+    base_dir = os.path.join(DOWNLOAD_DIR, username)
+    image_path = os.path.join(base_dir, filename)
+    thumbnail_requested = request.args.get('thumbnail', False)
+
+    if thumbnail_requested:
+        thumbnail_path = ensure_thumbnail(image_path)
+        return send_from_directory(base_dir, os.path.basename(thumbnail_path))
+    else:
+        return send_from_directory(base_dir, filename)
+
 
 
 @app.route('/', methods=['GET'])
@@ -123,6 +157,29 @@ def gallery():
     db.close()
     return jsonify([dict(item) for item in items])
 
+def create_thumbnail(image_path, thumbnail_path, size=(128, 128)):
+    with Image.open(image_path) as img:
+        img.thumbnail(size)
+        img.save(thumbnail_path)
+
+
+def ensure_thumbnail(image_path):
+    directory, filename = os.path.split(image_path)
+    thumbnail_path = os.path.join(directory, f"{filename.split('.')[0]}_thumbnail.webp")
+
+    if not os.path.exists(thumbnail_path):
+        with Image.open(image_path) as img:
+            width, height = img.size
+            if width < 300 or height < 300:
+                return image_path # Don't create thumbnail if image is too small
+            new_width = int(width * 0.3)  
+            new_height = int(height * 0.3) 
+            img.thumbnail((new_width, new_height))
+            img.save(thumbnail_path, "WEBP")
+
+    return thumbnail_path
+
+
 
 if __name__ == "__main__":
-    app.run(debug=True, host='0.0.0.0', port=80)
+    app.run(debug=True, host='0.0.0.0', port=5000)

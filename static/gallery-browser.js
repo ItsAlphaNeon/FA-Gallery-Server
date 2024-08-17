@@ -39,18 +39,22 @@ document.addEventListener("DOMContentLoaded", function () {
                 item.is_thumbnail_saved == 1
                     ? getThumbnailPath(item)
                     : getFullImagePath(item);
+            let url = `/content/${encodeURIComponent(
+                item.account_name
+            )}/${encodeURIComponent(thumbUrl)}?thumbnail=true`;
+
             const itemDiv = document.createElement("div");
             itemDiv.className = "gallery-item";
-    
+
             const ratingClass = getRatingClass(item.rating);
             itemDiv.className += ` ${ratingClass}`;
-    
+
             const ratingPanel = `
                 <div class="gallery-item-rating ${ratingClass}" title="Rating: ${item.rating}">
                     ${item.rating}
                 </div>
             `;
-    
+
             const infoPanel = `
                 <div class="gallery-item-info">
                     <div class="title" title="${item.title}">${item.title}</div>
@@ -62,32 +66,30 @@ document.addEventListener("DOMContentLoaded", function () {
                     <div class="date" title="${item.date_uploaded}">Uploaded: ${item.date_uploaded}</div>
                 </div>
             `;
-    
+
             itemDiv.innerHTML = ratingPanel + infoPanel;
-    
+
             const itemButton = document.createElement("button");
-            itemButton.style.background = 'none';
-            itemButton.style.border = 'none';
-            itemButton.style.padding = '0';
-            itemButton.style.margin = '0';
-            itemButton.style.width = 'auto';
-            itemButton.style.height = 'auto';
-            itemButton.style.cursor = 'pointer';
+            itemButton.style.background = "none";
+            itemButton.style.border = "none";
+            itemButton.style.padding = "0";
+            itemButton.style.margin = "0";
+            itemButton.style.width = "auto";
+            itemButton.style.height = "auto";
+            itemButton.style.cursor = "pointer";
             itemButton.innerHTML = `
-                <img src="/content${thumbUrl}" alt="${item.title}" class="gallery-thumbnail">
+                <img src="${url}" alt="${item.title}" class="gallery-thumbnail">
             `;
-    
-            itemButton.onclick = function() {
+
+            itemButton.onclick = function () {
                 window.location.href = `/submission/${item.id}`;
             };
-    
+
             itemDiv.appendChild(itemButton);
             gallery.appendChild(itemDiv);
+            console.log(itemDiv);
         });
     }
-    
-    
-    
 
     function getRatingClass(rating) {
         switch (rating) {
@@ -105,13 +107,13 @@ document.addEventListener("DOMContentLoaded", function () {
     function getFullImagePath(item) {
         const user = cleanAccountName(item.account_name);
         const content = item.content_name;
-        return `/${user}/${content}`;
+        return `/${content}`;
     }
 
     function getThumbnailPath(item) {
         const user = cleanAccountName(item.account_name);
         const thumbnail_name = item.thumbnail_name;
-        return `/${user}/thumbnail/${thumbnail_name}`;
+        return `/thumbnail/${thumbnail_name}`;
     }
 
     function cleanAccountName(account_name) {
@@ -122,8 +124,12 @@ document.addEventListener("DOMContentLoaded", function () {
         // <span id="currentPageText">Current Page: </span>
         const currentPage = document.getElementById("currentPage");
         const currentPageText = document.getElementById("currentPageText");
-        const currentPageTextBottom = document.getElementById("currentPageTextBottom");
-        const CurrentPageTextMobile = document.getElementById("currentPageTextMobile");
+        const currentPageTextBottom = document.getElementById(
+            "currentPageTextBottom"
+        );
+        const CurrentPageTextMobile = document.getElementById(
+            "currentPageTextMobile"
+        );
         currentPageText.innerText = `Current Page: ${currentPage.value}`;
         currentPageTextBottom.innerText = `Current Page: ${currentPage.value}`;
         CurrentPageTextMobile.innerText = `Current Page: ${currentPage.value}`;
