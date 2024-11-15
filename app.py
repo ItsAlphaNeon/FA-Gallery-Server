@@ -8,9 +8,12 @@ from PIL import Image
 import sys
 import argparse
 
-DATABASE = [file for file in os.listdir() if file.endswith('.db')][0]
+try:
+    DATABASE = [file for file in os.listdir() if file.endswith('.db')][0]
+except IndexError:
+    DATABASE = None
 if not DATABASE:
-    sys.exit("Database not found. Please import your database file to {os.getcwd()}")
+    sys.exit(f"Database not found. Please import your database file to {os.getcwd()}")
 DOWNLOAD_DIR = os.path.join(os.getcwd(), "downloaded_content")
 if not os.path.exists(DOWNLOAD_DIR):
     sys.exit(f"Download directory not found. Please import your downloaded_content folder to {os.getcwd()}")
@@ -48,14 +51,13 @@ def download_content(username, filename):
     image_path = os.path.join(base_dir, filename)
     thumbnail_requested = request.args.get('thumbnail', False)
 
-
     if thumbnail_requested:
-        thumbnail_path = ensure_thumbnail(image_path)
-        print(f"\033[92mSending thumbnail: {thumbnail_path}\033[0m")
-        return send_from_directory(base_dir, os.path.basename(thumbnail_path))
+        ensure_thumbnail(image_path)  # Only ensure it exists
+        thumbnail_filename = f"{filename.split('.')[0]}_thumbnail.webp"  # Expected filename
+        return send_from_directory(base_dir, thumbnail_filename)
     else:
-        print(f"Sending image: {image_path}\033[0m")
         return send_from_directory(base_dir, filename)
+
 
 
 
@@ -156,7 +158,6 @@ def gallery():
 
     db = get_db()
     items = db.execute(query, (per_page, offset)).fetchall()
-    logging.debug(f"Query: {query}")
     db.close()
     return jsonify([dict(item) for item in items])
 
@@ -167,15 +168,16 @@ def ensure_thumbnail(image_path):
 
     if not os.path.exists(thumbnail_path):
         create_thumbnail(image_path, thumbnail_path)
-    
     return thumbnail_path
 
 
 def create_thumbnail(image_path, thumbnail_path):
     with Image.open(image_path) as img:
         width, height = img.size
-        if width < 300 or height < 300:
-            return image_path  # Don't create thumbnail if image is too small
+        if width < 500 or height < 500:
+            img.thumbnail((width, height)) # No need to resize
+            img.save(thumbnail_path, "WEBP")
+            return
         new_width = int(width * 0.3)
         new_height = int(height * 0.3)
         img.thumbnail((new_width, new_height))

@@ -78,7 +78,7 @@ document.addEventListener("DOMContentLoaded", function () {
             itemButton.style.height = "auto";
             itemButton.style.cursor = "pointer";
             itemButton.innerHTML = `
-                <img src="${url}" alt="${item.title}" class="gallery-thumbnail">
+                <img src="${url}" alt="${item.title}" class="gallery-thumbnail" onerror="this.onerror=null;this.src='/static/images/default-thumbnail.svg';">
             `;
 
             itemButton.onclick = function () {
@@ -87,7 +87,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
             itemDiv.appendChild(itemButton);
             gallery.appendChild(itemDiv);
-            console.log(itemDiv);
         });
     }
 
@@ -121,7 +120,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function updatePageNumber() {
-        // <span id="currentPageText">Current Page: </span>
         const currentPage = document.getElementById("currentPage");
         const currentPageText = document.getElementById("currentPageText");
         const currentPageTextBottom = document.getElementById(

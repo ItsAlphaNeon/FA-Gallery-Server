@@ -1,5 +1,20 @@
 <html>
     <head>
+        <style>
+            body {
+              --adult-color: #971c1c;
+              --bg-color: #1b1b1d;
+              --border-color: #cfd3eb;
+              --border-radius: 5px;
+              --component-bg-color: #353b45;
+              --component-hover-color: #576175;
+              --link-color: #e2ecf3;
+              --mature-color: #697cc1;
+              background: var(--bg-color);
+              color: var(--border-color);
+              font-family: "Open Sans";
+            }
+          </style>
         <title>Art Page</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
@@ -7,7 +22,7 @@
     <body>
         <div class="header">
             <div class="left">
-                <button onclick="window.location.href = '/'">Back to search</button>
+                <button onclick="window.history.back()">Previus Page</button>
             </div>
             </div>
         </div>

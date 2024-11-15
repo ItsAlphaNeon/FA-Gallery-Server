@@ -1,16 +1,4 @@
-body {
-	--adult-color: #971c1c;
-	--bg-color: #1b1b1d;
-	--border-color: #cfd3eb;
-	--border-radius: 5px;
-	--component-bg-color: #353b45;
-	--component-hover-color: #576175;
-	--link-color: #e2ecf3;
-	--mature-color: #697cc1;
-	background: var(--bg-color);
-	color: var(--border-color);
-	font-family: "Open Sans";
-}
+
 
 .author {
 	color: #b9b9b9;
@@ -96,25 +84,25 @@ body {
 }
 
 .gallery {
-	align-items: flex-start;
+	/* align-items: flex-start;
 	display: flex;
 	flex-wrap: wrap;
-	justify-content: space-around;
+	justify-content: space-around; */
 	padding: 5px;
 }
 
 .gallery-item {
 	background-color: #3a3a3a;
 	border-radius: 15px;
-	display: inline-block;
+	display: inline-grid;
 	margin: 5px;
 	overflow: hidden;
-	padding: 5px;
+	padding: 4px;
 	position: relative;
 	width: calc(16.666% - 20px);
 }
 
-.gallery-item .gallery-item-info {
+.gallery-item-info {
 	background: rgba(0,0,0,0.7);
 	bottom: 0;
 	color: white;
@@ -124,12 +112,6 @@ body {
 	position: absolute;
 	right: 0;
 	text-align: left;
-}
-
-.gallery-item img {
-	height: auto;
-	vertical-align: bottom;
-	width: 100%;
 }
 
 .gallery-item-rating {

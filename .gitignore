@@ -265,3 +265,5 @@ pyrightconfig.json
 gallery.db
 /__pycache__
 fa-gallery-downloader.db
+symlink.cmd
+database.db
